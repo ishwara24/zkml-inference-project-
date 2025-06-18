@@ -1,0 +1,7 @@
+{
+  "input_visibility": "private",
+  "output_visibility": "public",
+  "param_visibility": "private",
+  "logrows": 17,
+  "scale": 7
+}
