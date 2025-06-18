@@ -1,0 +1,22 @@
+# Step 1: Clone EZKL (v7.2.0) and build
+git clone --branch v7.2.0 https://github.com/zkonduit/ezkl.git
+cd ezkl
+cargo build --release
+
+# Step 2: Export PyTorch model to ONNX (already done using export_to_onnx.py)
+# Resulting file: model.onnx
+
+# Step 3: Compile ONNX to circuit
+C:\ezkl_build\ezkl\target\release\ezkl.exe compile-circuit --model C:\ezkl_build\myzkml\model.onnx --compiled-circuit C:\ezkl_build\myzkml\model.compiled --settings-path C:\ezkl_build\myzkml\settings.json
+
+# Step 4: Setup proving + verifying keys
+C:\ezkl_build\ezkl\target\release\ezkl.exe setup --compiled-circuit C:\ezkl_build\myzkml\model.compiled --pk-path C:\ezkl_build\myzkml\pk.key --vk-path C:\ezkl_build\myzkml\vk.key
+
+# Step 5: Generate witness
+C:\ezkl_build\ezkl\target\release\ezkl.exe gen-witness --compiled-circuit C:\ezkl_build\myzkml\model.compiled --data @C:\ezkl_build\myzkml\input.json --output C:\ezkl_build\myzkml\witness.json
+
+# Step 6: Prove
+C:\ezkl_build\ezkl\target\release\ezkl.exe prove --compiled-circuit C:\ezkl_build\myzkml\model.compiled --input @C:\ezkl_build\myzkml\input.json --pk-path C:\ezkl_build\myzkml\pk.key --proof-path C:\ezkl_build\myzkml\proof.json --witness C:\ezkl_build\myzkml\witness.json
+
+# Step 7: Verify
+C:\ezkl_build\ezkl\target\release\ezkl.exe verify --compiled-circuit C:\ezkl_build\myzkml\model.compiled --input @C:\ezkl_build\myzkml\input.json --vk-path C:\ezkl_build\myzkml\vk.key --proof-path C:\ezkl_build\myzkml\proof.json
